@@ -2,7 +2,7 @@ import Foundation
 
 enum TranscriptionService {
     static func transcribe(_ audioURL: URL) async throws -> String {
-        guard let apiKey = ProcessInfo.processInfo.environment["OPENAI_API_KEY"], !apiKey.isEmpty else {
+        guard let apiKey = Config["OPENAI_API_KEY"] else {
             throw StenoError.missingAPIKey("OPENAI_API_KEY")
         }
 

@@ -4,26 +4,25 @@ Menu bar dictation app for macOS. Hold `⌃Space`, speak, release — text is pa
 
 ## Setup
 
-**1. Clone and open in Xcode**
+**1. Add your OpenAI API key**
 ```bash
-git clone https://github.com/jasontklr/steno
+echo "OPENAI_API_KEY=sk-..." >> ~/.config/steno/config
+```
+
+**2. Clone and open in Xcode**
+```bash
+git clone https://github.com/tklrstudio/steno
 cd steno
 xed .
 ```
 
-**2. Set your OpenAI API key**
+**3. Grant Accessibility permission (one-time, manual)**
 
-In Xcode: Edit Scheme → Run → Arguments → Environment Variables
-```
-OPENAI_API_KEY = sk-...
-```
-
-**3. Grant permissions (first run)**
-
-- **Microphone** — macOS will prompt automatically
-- **Accessibility** — System Settings → Privacy & Security → Accessibility → add Steno
+System Settings → Privacy & Security → Accessibility → add Steno
 
 **4. Build and run** (`⌘R`)
+
+Microphone permission is requested automatically on first use.
 
 The app lives in the menu bar. No Dock icon.
 
