@@ -1,4 +1,5 @@
 import AppKit
+import Network
 import Speech
 import HotKey
 
@@ -6,12 +7,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem!
     private var hotKey: HotKey!
     private var activeSession: DictationSession?
+    private var preferencesWindowController: PreferencesWindowController?
+    private let pathMonitor = NWPathMonitor()
+    private var isOnline = false
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
         setupStatusItem()
         setupHotKey()
         requestPermissions()
+        pathMonitor.pathUpdateHandler = { [weak self] path in self?.isOnline = path.status == .satisfied }
+        pathMonitor.start(queue: .global(qos: .background))
+        if GroqSession.apiKey == nil {
+            showPreferences()
+        }
     }
 
     private func requestPermissions() {
@@ -27,8 +36,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Steno", action: nil, keyEquivalent: ""))
         menu.addItem(.separator())
+        menu.addItem(NSMenuItem(title: "Preferences…", action: #selector(showPreferences), keyEquivalent: ","))
+        menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         statusItem.menu = menu
+    }
+
+    @objc func showPreferences() {
+        if preferencesWindowController == nil {
+            preferencesWindowController = PreferencesWindowController()
+        }
+        preferencesWindowController?.showWindow(nil)
+        NSApp.activate(ignoringOtherApps: true)
     }
 
     private func setupHotKey() {
@@ -38,8 +57,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func makeSession() -> DictationSession {
-        let backend = Config["STENO_BACKEND"] ?? "apple"
-        return backend == "whisper" ? WhisperSession() : AppleSession()
+        let backend = Config["STENO_BACKEND"]
+        if backend == "whisper" { return WhisperSession() }
+        if backend == "apple"   { return AppleSession() }
+        // Default: Groq when online + key present, chunked Apple otherwise
+        return (isOnline && GroqSession.apiKey != nil) ? GroqSession() : AppleSession()
     }
 
     private func startRecording() {
