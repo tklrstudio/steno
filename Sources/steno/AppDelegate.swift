@@ -21,7 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func setupStatusItem() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         statusItem.button?.title = "⬤"
-        statusItem.button?.toolTip = "Steno — hold ⌃Space to dictate"
+        statusItem.button?.toolTip = "Steno — hold ⌥Space to dictate"
 
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Steno", action: nil, keyEquivalent: ""))
@@ -31,7 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func setupHotKey() {
-        hotKey = HotKey(key: .space, modifiers: [.control])
+        hotKey = HotKey(key: .space, modifiers: [.option])
         hotKey.keyDownHandler = { [weak self] in self?.startRecording() }
         hotKey.keyUpHandler = { [weak self] in self?.stopAndTranscribe() }
     }
