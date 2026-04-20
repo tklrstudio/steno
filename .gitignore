@@ -3,3 +3,6 @@ Steno.app/
 *.xcodeproj
 .swiftpm/
 Support/signing/
+
+.DS_Store
+*.private.md
