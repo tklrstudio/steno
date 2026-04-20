@@ -20,6 +20,7 @@ class AppleSession: DictationSession {
     func start() throws {
         request = SFSpeechAudioBufferRecognitionRequest()
         request?.shouldReportPartialResults = false
+        request?.addsPunctuation = true
 
         let inputNode = engine.inputNode
         let format = inputNode.outputFormat(forBus: 0)
