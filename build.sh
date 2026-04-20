@@ -16,7 +16,7 @@ cp .build/release/steno "$BUNDLE/MacOS/steno"
 cp Support/Info.plist "$BUNDLE/"
 
 echo "Signing..."
-codesign --sign - --force --deep "$APP"
+codesign --sign "Steno Code Signing" --force --deep "$APP"
 
 echo "Installing to ~/Applications..."
 mkdir -p "$INSTALL_DIR"

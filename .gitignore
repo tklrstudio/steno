@@ -2,3 +2,4 @@
 Steno.app/
 *.xcodeproj
 .swiftpm/
+Support/signing/
