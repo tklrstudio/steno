@@ -1,16 +1,22 @@
 import AppKit
-import AVFoundation
+import Speech
 import HotKey
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem!
     private var hotKey: HotKey!
-    private let recorder = AudioRecorder()
+    private var activeSession: DictationSession?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
         setupStatusItem()
         setupHotKey()
+        requestPermissions()
+    }
+
+    private func requestPermissions() {
+        SFSpeechRecognizer.requestAuthorization { _ in }
+        // Mic permission is requested by AVAudioEngine on first use
     }
 
     private func setupStatusItem() {
@@ -31,34 +37,44 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         hotKey.keyUpHandler = { [weak self] in self?.stopAndTranscribe() }
     }
 
+    private func makeSession() -> DictationSession {
+        let backend = Config["STENO_BACKEND"] ?? "apple"
+        return backend == "whisper" ? WhisperSession() : AppleSession()
+    }
+
     private func startRecording() {
-        setIcon("🔴")
-        recorder.start()
+        let session = makeSession()
+        activeSession = session
+        do {
+            try session.start()
+            setIcon("🔴")
+        } catch {
+            print("Steno start error: \(error)")
+            activeSession = nil
+            setIcon("❌")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { self.setIcon("⬤") }
+        }
     }
 
     private func stopAndTranscribe() {
+        guard let session = activeSession else { setIcon("⬤"); return }
+        activeSession = nil
         setIcon("⏳")
-        recorder.stop { [weak self] audioURL in
-            guard let audioURL else { self?.setIcon("⬤"); return }
-            Task {
-                do {
-                    let text = try await TranscriptionService.transcribe(audioURL)
-                    Injector.paste(text + " ")
-                    self?.setIcon("⬤")
-                } catch {
-                    print("Steno error: \(error)")
-                    self?.setIcon("❌")
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        self?.setIcon("⬤")
-                    }
-                }
+
+        Task {
+            do {
+                let text = try await session.stop()
+                Injector.paste(text + " ")
+                setIcon("⬤")
+            } catch {
+                print("Steno error: \(error)")
+                setIcon("❌")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) { self.setIcon("⬤") }
             }
         }
     }
 
     private func setIcon(_ icon: String) {
-        DispatchQueue.main.async {
-            self.statusItem.button?.title = icon
-        }
+        DispatchQueue.main.async { self.statusItem.button?.title = icon }
     }
 }
