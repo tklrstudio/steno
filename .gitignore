@@ -1,0 +1,4 @@
+.build/
+Steno.app/
+*.xcodeproj
+.swiftpm/
