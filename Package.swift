@@ -12,7 +12,6 @@ let package = Package(
             name: "steno",
             dependencies: ["HotKey"],
             path: "Sources/steno",
-            resources: [.process("Resources")]
         ),
     ]
 )

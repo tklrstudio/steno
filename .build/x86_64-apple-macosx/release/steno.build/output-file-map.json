@@ -1,0 +1,43 @@
+{
+  "": {
+    "dependencies": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/steno.d",
+    "object": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/steno.o",
+    "swift-dependencies": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/master.swiftdeps"
+  },
+  "/Users/tklr/Development/Github/steno/Sources/steno/AppDelegate.swift": {
+    "object": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/AppDelegate.swift.o",
+    "swiftmodule": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/AppDelegate~partial.swiftmodule",
+    "swift-dependencies": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/AppDelegate.swiftdeps",
+    "diagnostics": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/AppDelegate.dia"
+  },
+  "/Users/tklr/Development/Github/steno/Sources/steno/AudioRecorder.swift": {
+    "object": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/AudioRecorder.swift.o",
+    "swiftmodule": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/AudioRecorder~partial.swiftmodule",
+    "swift-dependencies": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/AudioRecorder.swiftdeps",
+    "diagnostics": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/AudioRecorder.dia"
+  },
+  "/Users/tklr/Development/Github/steno/Sources/steno/Config.swift": {
+    "object": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/Config.swift.o",
+    "swiftmodule": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/Config~partial.swiftmodule",
+    "swift-dependencies": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/Config.swiftdeps",
+    "diagnostics": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/Config.dia"
+  },
+  "/Users/tklr/Development/Github/steno/Sources/steno/Injector.swift": {
+    "object": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/Injector.swift.o",
+    "swiftmodule": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/Injector~partial.swiftmodule",
+    "swift-dependencies": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/Injector.swiftdeps",
+    "diagnostics": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/Injector.dia"
+  },
+  "/Users/tklr/Development/Github/steno/Sources/steno/TranscriptionService.swift": {
+    "object": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/TranscriptionService.swift.o",
+    "swiftmodule": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/TranscriptionService~partial.swiftmodule",
+    "swift-dependencies": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/TranscriptionService.swiftdeps",
+    "diagnostics": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/TranscriptionService.dia"
+  },
+  "/Users/tklr/Development/Github/steno/Sources/steno/main.swift": {
+    "object": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/main.swift.o",
+    "swiftmodule": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/main~partial.swiftmodule",
+    "swift-dependencies": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/main.swiftdeps",
+    "diagnostics": "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/steno.build/main.dia"
+  }
+}

@@ -1,0 +1,3 @@
+module HotKey {
+    header "/Users/tklr/Development/Github/steno/.build/x86_64-apple-macosx/release/HotKey.build/include/HotKey-Swift.h"
+}
