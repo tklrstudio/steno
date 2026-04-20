@@ -12,5 +12,7 @@
     <string>1</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>Steno needs microphone access to record your voice for dictation.</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Steno uses speech recognition to transcribe your voice.</string>
 </dict>
 </plist>

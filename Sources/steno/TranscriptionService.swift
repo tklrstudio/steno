@@ -1,6 +1,57 @@
 import Foundation
 
 enum TranscriptionService {
+    static func transcribe(_ audioURL: URL) async throws -> String {
+        let backend = Config["STENO_BACKEND"] ?? "apple"
+        switch backend {
+        case "whisper": return try await WhisperBackend.transcribe(audioURL)
+        default:        return try await AppleSpeechBackend.transcribe(audioURL)
+        }
+    }
+}
+
+// MARK: - Apple Speech (default)
+
+import Speech
+
+private enum AppleSpeechBackend {
+    static func transcribe(_ audioURL: URL) async throws -> String {
+        if SFSpeechRecognizer.authorizationStatus() != .authorized {
+            let granted = await requestPermission()
+            guard granted else { throw StenoError.speechPermissionDenied }
+        }
+
+        guard let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US")),
+              recognizer.isAvailable else {
+            throw StenoError.speechUnavailable
+        }
+
+        let request = SFSpeechURLRecognitionRequest(url: audioURL)
+        request.requiresOnDeviceRecognition = true
+        request.shouldReportPartialResults = false
+
+        return try await withCheckedThrowingContinuation { continuation in
+            recognizer.recognitionTask(with: request) { result, error in
+                if let error { continuation.resume(throwing: error); return }
+                if let result, result.isFinal {
+                    continuation.resume(returning: result.bestTranscription.formattedString)
+                }
+            }
+        }
+    }
+
+    private static func requestPermission() async -> Bool {
+        await withCheckedContinuation { continuation in
+            SFSpeechRecognizer.requestAuthorization { status in
+                continuation.resume(returning: status == .authorized)
+            }
+        }
+    }
+}
+
+// MARK: - Whisper.cpp
+
+private enum WhisperBackend {
     private static let modelsDir = "\(NSHomeDirectory())/.config/steno/models"
 
     private static var modelPath: String {
@@ -41,25 +92,27 @@ enum TranscriptionService {
                 }
             }
 
-            do {
-                try process.run()
-            } catch {
-                continuation.resume(throwing: error)
-            }
+            do { try process.run() } catch { continuation.resume(throwing: error) }
         }
     }
 }
+
+// MARK: - Errors
 
 enum StenoError: LocalizedError {
     case whisperNotFound
     case modelNotFound
     case emptyTranscription
+    case speechPermissionDenied
+    case speechUnavailable
 
     var errorDescription: String? {
         switch self {
-        case .whisperNotFound: return "whisper-cli not found — run ./setup.sh"
-        case .modelNotFound:   return "Whisper model not found — run ./setup.sh"
-        case .emptyTranscription: return "No speech detected"
+        case .whisperNotFound:       return "whisper-cli not found — run ./setup.sh"
+        case .modelNotFound:        return "Whisper model not found — run ./setup.sh"
+        case .emptyTranscription:   return "No speech detected"
+        case .speechPermissionDenied: return "Speech recognition permission denied"
+        case .speechUnavailable:    return "Speech recognizer unavailable"
         }
     }
 }

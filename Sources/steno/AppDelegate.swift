@@ -43,7 +43,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             Task {
                 do {
                     let text = try await TranscriptionService.transcribe(audioURL)
-                    Injector.paste(text)
+                    Injector.paste(text + " ")
                     self?.setIcon("⬤")
                 } catch {
                     print("Steno error: \(error)")
