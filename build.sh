@@ -30,7 +30,10 @@ if [ ! -f "$LAUNCH_AGENT" ]; then
     echo "Login item registered."
 fi
 
+echo "Relaunching..."
+pkill -x steno 2>/dev/null; sleep 0.5
+open "$INSTALL_DIR/$APP"
+
 echo "Done → $INSTALL_DIR/$APP"
 echo ""
 echo "If first install: System Settings → Privacy & Security → Accessibility → add Steno"
-open "$INSTALL_DIR/$APP"
