@@ -1,7 +1,16 @@
 import Foundation
 
 enum TranscriptionService {
-    private static let modelPath = "\(NSHomeDirectory())/.config/steno/models/ggml-base.en.bin"
+    private static let modelsDir = "\(NSHomeDirectory())/.config/steno/models"
+
+    private static var modelPath: String {
+        let name = Config["STENO_MODEL"] ?? "ggml-base.en"
+        return "\(modelsDir)/\(name).bin"
+    }
+
+    private static var threads: String {
+        Config["STENO_THREADS"] ?? "\(max(1, ProcessInfo.processInfo.processorCount - 2))"
+    }
 
     private static var whisperCLI: String? {
         ["/opt/homebrew/bin/whisper-cli", "/usr/local/bin/whisper-cli"]
@@ -18,7 +27,7 @@ enum TranscriptionService {
             let stderr = Pipe()
 
             process.executableURL = URL(fileURLWithPath: cli)
-            process.arguments = ["-m", modelPath, "-f", audioURL.path, "-nt", "-np", "-l", "en"]
+            process.arguments = ["-m", modelPath, "-f", audioURL.path, "-nt", "-np", "-l", "en", "-t", threads]
             process.standardOutput = stdout
             process.standardError = stderr
 
