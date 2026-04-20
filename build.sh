@@ -23,6 +23,13 @@ mkdir -p "$INSTALL_DIR"
 rm -rf "$INSTALL_DIR/$APP"
 cp -r "$APP" "$INSTALL_DIR/"
 
+LAUNCH_AGENT="$HOME/Library/LaunchAgents/net.tklr.steno.plist"
+if [ ! -f "$LAUNCH_AGENT" ]; then
+    cp Support/net.tklr.steno.plist "$LAUNCH_AGENT"
+    launchctl load "$LAUNCH_AGENT"
+    echo "Login item registered."
+fi
+
 echo "Done → $INSTALL_DIR/$APP"
 echo ""
 echo "If first install: System Settings → Privacy & Security → Accessibility → add Steno"
