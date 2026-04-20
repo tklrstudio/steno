@@ -1,6 +1,6 @@
 # Steno Charter
 
-**Purpose:** macOS menu bar dictation app — speak anywhere, paste instantly
+**Purpose:** Stop typing. Speak instead — in any app, for free, without delays.
 **Status:** Canonical
 **Scope:** Project
 **Branch:** Operations
@@ -14,19 +14,30 @@
 
 ## Purpose
 
-Steno eliminates typing friction for anyone who speaks faster than they type. Hold a hotkey, speak, release — transcribed text is pasted into whatever app has focus.
+Steno eliminates typing friction. Hold `⌥Space`, speak, release — transcribed text is pasted wherever the cursor is. It runs on-device, costs nothing, and stays out of the way.
+
+See `VISION_AND_STRATEGY.md` for the full design philosophy.
 
 ## Success Criteria
 
-- Transcription latency under 1 second for typical utterances
-- Works in any macOS app with a text field (Chrome, Edge, Teams, Claude, Terminal)
-- Zero ongoing cost (on-device recognition by default)
-- Runs silently in the menu bar, starts on login
+- Transcription result pasted before the thought is gone (sub-second with Apple backend)
+- Works in any macOS app with a text field — no per-app configuration
+- Zero ongoing cost — fully on-device by default
+- Runs silently in the menu bar, starts on login, requires no attention
 
 ## Boundaries
 
-- **In scope:** macOS menu bar app, hotkey-triggered dictation, on-device Apple Speech backend, local whisper.cpp backend, clipboard injection
-- **Out of scope:** iOS/Windows, cloud transcription services, multi-user, audio editing
+**In scope:**
+- macOS menu bar app, hotkey-triggered dictation
+- On-device Apple Speech backend (default) and local whisper.cpp backend
+- Clipboard injection via CGEventPost — universal, no app-specific code
+
+**Out of scope:**
+- iOS, Windows, or any non-macOS platform
+- Cloud transcription services (cost and latency)
+- Transcription history, dashboards, or settings UI
+- Team features or multi-user support
+- AI post-processing (adds latency, adds cost)
 
 ---
 
