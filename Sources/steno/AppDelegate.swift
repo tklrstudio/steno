@@ -9,13 +9,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
-        requestMicPermission()
         setupStatusItem()
         setupHotKey()
-    }
-
-    private func requestMicPermission() {
-        AVCaptureDevice.requestAccess(for: .audio) { _ in }
     }
 
     private func setupStatusItem() {
