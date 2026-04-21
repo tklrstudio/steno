@@ -39,3 +39,7 @@ The app lives in the menu bar. No Dock icon.
 - macOS 13+
 - Xcode 15+
 - OpenAI API key (Whisper transcription, ~$0.006/min)
+
+## How to Work Here
+
+This repo is governed by the [living-systems](https://github.com/tklrstudio/living-systems) framework. See `_context/CHARTER.md` for project boundaries and `LOCAL_AI_INSTRUCTIONS.md` for AI collaboration context.
