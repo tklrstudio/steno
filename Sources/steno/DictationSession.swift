@@ -214,6 +214,7 @@ class GroqSession: DictationSession {
     }
 
     func stop() async throws -> String {
+        try? await Task.sleep(nanoseconds: 400_000_000) // capture tail of last word
         recorder?.stop()
         guard let url = audioURL else { throw StenoError.emptyTranscription }
         guard let key = GroqSession.apiKey else { throw StenoError.groqKeyMissing }

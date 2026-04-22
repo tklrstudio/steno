@@ -6,7 +6,10 @@ BUNDLE="$APP/Contents"
 INSTALL_DIR="$HOME/Applications"
 
 echo "Building..."
-swift build -c release 2>&1
+# Use SWIFT_TOOLCHAIN env var if set (required on machines with only CLT, e.g. MacBook Air)
+# On machines with Xcode, plain `swift` works fine.
+SWIFT=${SWIFT_TOOLCHAIN:-swift}
+"$SWIFT" build -c release 2>&1
 
 echo "Packaging..."
 rm -rf "$APP"
@@ -19,9 +22,8 @@ echo "Signing..."
 codesign --sign "Steno Code Signing" --force --deep "$APP"
 
 echo "Installing to ~/Applications..."
-mkdir -p "$INSTALL_DIR"
-rm -rf "$INSTALL_DIR/$APP"
-cp -r "$APP" "$INSTALL_DIR/"
+mkdir -p "$INSTALL_DIR/$APP/Contents/MacOS" "$INSTALL_DIR/$APP/Contents/Resources"
+rsync -a --delete "$APP/" "$INSTALL_DIR/$APP/"
 
 LAUNCH_AGENT="$HOME/Library/LaunchAgents/net.tklr.steno.plist"
 if [ ! -f "$LAUNCH_AGENT" ]; then

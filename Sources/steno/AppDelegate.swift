@@ -7,7 +7,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem!
     private var hotKey: HotKey!
     private var activeSession: DictationSession?
-    private var preferencesWindowController: PreferencesWindowController?
     private let pathMonitor = NWPathMonitor()
     private var isOnline = false
 
@@ -18,9 +17,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         requestPermissions()
         pathMonitor.pathUpdateHandler = { [weak self] path in self?.isOnline = path.status == .satisfied }
         pathMonitor.start(queue: .global(qos: .background))
-        if GroqSession.apiKey == nil {
-            showPreferences()
-        }
     }
 
     private func requestPermissions() {
@@ -36,18 +32,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Steno", action: nil, keyEquivalent: ""))
         menu.addItem(.separator())
-        menu.addItem(NSMenuItem(title: "Preferences…", action: #selector(showPreferences), keyEquivalent: ","))
-        menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         statusItem.menu = menu
-    }
-
-    @objc func showPreferences() {
-        if preferencesWindowController == nil {
-            preferencesWindowController = PreferencesWindowController()
-        }
-        preferencesWindowController?.showWindow(nil)
-        NSApp.activate(ignoringOtherApps: true)
     }
 
     private func setupHotKey() {
@@ -60,7 +46,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let backend = Config["STENO_BACKEND"]
         if backend == "whisper" { return WhisperSession() }
         if backend == "apple"   { return AppleSession() }
-        // Default: Groq when online + key present, chunked Apple otherwise
+        // Default: Groq when online + key present, Apple otherwise
         return (isOnline && GroqSession.apiKey != nil) ? GroqSession() : AppleSession()
     }
 
@@ -71,7 +57,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             try session.start()
             setIcon("🔴")
         } catch {
-            print("Steno start error: \(error)")
             activeSession = nil
             setIcon("❌")
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) { self.setIcon("⬤") }
@@ -89,7 +74,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 Injector.paste(text + " ")
                 setIcon("⬤")
             } catch {
-                print("Steno error: \(error)")
                 setIcon("❌")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) { self.setIcon("⬤") }
             }
