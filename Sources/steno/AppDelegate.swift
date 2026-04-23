@@ -1,5 +1,4 @@
 import AppKit
-import Network
 import Speech
 import HotKey
 
@@ -7,16 +6,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem!
     private var hotKey: HotKey!
     private var activeSession: DictationSession?
-    private let pathMonitor = NWPathMonitor()
-    private var isOnline = false
+    private var preferencesWindowController: PreferencesWindowController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
         setupStatusItem()
         setupHotKey()
         requestPermissions()
-        pathMonitor.pathUpdateHandler = { [weak self] path in self?.isOnline = path.status == .satisfied }
-        pathMonitor.start(queue: .global(qos: .background))
     }
 
     private func requestPermissions() {
@@ -45,9 +41,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func makeSession() -> DictationSession {
         let backend = Config["STENO_BACKEND"]
         if backend == "whisper" { return WhisperSession() }
-        if backend == "apple"   { return AppleSession() }
-        // Default: Groq when online + key present, Apple otherwise
-        return (isOnline && GroqSession.apiKey != nil) ? GroqSession() : AppleSession()
+        if backend == "groq"    { return GroqSession() }
+        return AppleSession()
     }
 
     private func startRecording() {
