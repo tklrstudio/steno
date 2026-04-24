@@ -5,7 +5,7 @@ type: reference
 status: Canonical
 scope: Project
 created: 2026-04-22
-last_updated: 2026-04-22
+last_updated: 2026-04-24
 ---
 
 # Steno Deployments
@@ -16,13 +16,13 @@ Two machines run Steno. They share the same codebase but differ in build toolcha
 
 ## Mac Mini (primary)
 
-**Backend:** Apple on-device speech (default — no Groq key configured)
+**Backend:** Apple on-device speech
 **Build toolchain:** System `swift` via Xcode
-**Config:** `~/.config/steno/config` — none required for default behaviour
+**Config:** `~/.config/steno/config` — only non-Steno keys (e.g. OPENAI_API_KEY); no `STENO_BACKEND` set
 
 **Notes:**
-- Established setup, no deviations from Charter
-- On-device only, zero latency overhead, fully private
+- On-device only, zero latency overhead, fully private, works offline
+- No deviations from Charter
 
 ---
 
